@@ -1,14 +1,28 @@
-""" sample module doc string """
+""" opencv thingy """
 
+import cv2
 
-class SampleClass:
-    """ Sample class to test """
+img = cv2.imread("assets/finn.jpg")
 
-    def sample_method_add(self, first_int: int, second_int: int) -> int:
-        """ sample method to test """
-        return first_int + second_int
+cv2.imshow("output", img)
 
+cv2.waitKey(0)
 
-def sample_func_subtract(first_int: int, second_int: int) -> int:
-    """ Sample function to test """
-    return first_int - second_int
+cap = cv2.VideoCapture("assets/finn.mp4")
+
+while True:
+    success, img = cap.read()
+    cv2.imshow("Video", img)
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+cap = cv2.VideoCapture(0)
+
+cap.set(3, 640)
+cap.set(4, 480)
+
+while True:
+    success, img = cap.read()
+    cv2.imshow("Video", img)
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
