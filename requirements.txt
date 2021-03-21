@@ -6,4 +6,4 @@ configparser==3.8.1
 # Rx==3.0.1
 jsonschema
 opencv-contrib-python
-
+numpy
