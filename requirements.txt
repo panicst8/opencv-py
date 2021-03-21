@@ -5,3 +5,5 @@ configparser==3.8.1
 # requests==2.22.0
 # Rx==3.0.1
 jsonschema
+opencv-contrib-python
+
