@@ -3,9 +3,25 @@
 import cv2
 import numpy as np
 
-img = cv2.imread("assets/finn.jpg")
-cv2.imshow("output", img)
+
+img2 = np.zeros((512, 512, 3), np.uint8)
+# print(img2)
+
+# img2[:] = 255, 0, 0 # make image blue
+cv2.line(img2, (10, 10), (100, 100), (0, 255, 0), 5)
+cv2.rectangle(img2, (10, 10), (100, 100), (0, 255, 0), 5)
+cv2.circle(img2, (150, 150), 100, (0, 0, 255), cv2.FILLED)
+cv2.putText(
+    img2, "Hello World", (200, 200), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 255), 2
+)
+
+cv2.imshow("Black Image", img2)
 cv2.waitKey(0)
+
+
+img = cv2.imread("assets/finn.jpg")
+# cv2.imshow("output", img)
+# cv2.waitKey(0)
 
 # image change to grayscale
 imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -19,14 +35,14 @@ imgBlur = cv2.GaussianBlur(img, (7, 7), 0)
 
 # resizing image
 imgResize = cv2.resize(img, (300, 200))
-print("img: ", img.shape, "\nimResize: ", imgResize.shape)
-cv2.imshow("resized output", imgResize)
-cv2.waitKey(0)
+# print("img: ", img.shape, "\nimResize: ", imgResize.shape)
+# cv2.imshow("resized output", imgResize)
+# cv2.waitKey(0)
 
 # crop image
 imgCropped = img[0:500, 200:500]
-cv2.imshow("cropped output", imgCropped)
-cv2.waitKey(0)
+# cv2.imshow("cropped output", imgCropped)
+# cv2.waitKey(0)
 
 
 # imgCanny = cv2.Canny(img, 100, 100)
