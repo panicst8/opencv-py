@@ -15,13 +15,67 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 from app.utils import stackImages  # noqa: E402
 
 
+def getContours(img: Any, imgCanny: Any) -> Any:
+    """ get contours """
+
+    _img = img.copy()
+    # cv2.RETR_EXTERNAL - retreive outer externl contours
+    contours, hiarchy = cv2.findContours(
+        imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE
+    )
+
+    t, r, s, c = (0, 0, 0, 0)
+    for cnt in contours:
+        area = cv2.contourArea(cnt)
+        if area > 500:
+            cv2.drawContours(_img, cnt, -1, (255, 0, 0), 3)
+            peri = cv2.arcLength(cnt, True)
+            approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
+            objCor = len(approx)
+            x, y, w, h = cv2.boundingRect(approx)
+            cv2.rectangle(_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            typeOfShape = "?"
+            if objCor == 3:
+                t += 1
+                typeOfShape = f"{t} Tri"
+            if objCor == 4:
+                aspectRatio = w / float(h)
+                if aspectRatio > 0.98 and aspectRatio < 1.02:
+                    s += 1
+                    typeOfShape = f"{s} Sqr"
+                else:
+                    r += 1
+                    typeOfShape = f"{r} Rec"
+            if objCor > 4:
+                c += 1
+                typeOfShape = f"{c} Cir"
+            cv2.putText(
+                _img,
+                typeOfShape,
+                (x + (w // 2) - 10, y + (h // 2) - 5),
+                cv2.FONT_HERSHEY_COMPLEX,
+                0.7,
+                (0, 0, 0),
+                2,
+            )
+    print(f"Found: \n{t} Triangles\n{s} Squares")
+    print(f"{r} Rectangles\n{c} Circles")
+
+    return _img
+
+
 def shape_detection() -> None:
     """ Tut 7 shape detct """
     img = cv2.imread("assets/shapes.png")
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgBlur = cv2.GaussianBlur(imgGray, (7, 7), 1)
+    imgCanny = cv2.Canny(imgBlur, 50, 50)
+    imgBlank = np.zeros_like(img)
+    imgContour = getContours(img, imgCanny)
 
-    imgStack = stackImages(0.6, ([img, imgGray, imgBlur]))
+    imgStack = stackImages(
+        0.8, ([img, imgGray, imgBlur], [imgCanny, imgBlank, imgContour])
+    )
     cv2.imshow("Shapes", imgStack)
     cv2.waitKey(0)
     # kernal = np.ones((5, 5), np.uint8)
