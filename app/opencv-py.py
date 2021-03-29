@@ -15,6 +15,32 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 from app.utils import stackImages  # noqa: E402
 
 
+def face_detection() -> None:
+    """ detect faces from image """
+
+    # Load target image
+    img = cv2.imread("assets/lena.png")
+    # there are many prebuilt harrcascade types for identifying other things
+    faceCascade = cv2.CascadeClassifier("assets/haarcascade_frontalface_default.xml")
+    # Convert to grayscale
+    imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # where the magic happens
+    faces = faceCascade.detectMultiScale(imgGray, 1.1, 4)
+
+    # draw bounding box around each detected face
+    for (x, y, w, h) in faces:
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    # show results
+    cv2.imshow("Lena", img)
+    cv2.waitKey(0)
+
+
+face_detection()
+quit()
+
+
 def getContours(img: Any, imgCanny: Any) -> Any:
     """ get contours """
 
@@ -85,10 +111,6 @@ def shape_detection() -> None:
     # cv2.waitKey(0)
     # cv2.imshow("Shapes Blur", imgBlur)
     # cv2.waitKey(0)
-
-
-shape_detection()
-quit()
 
 
 def empty(val: Any) -> None:
