@@ -17,7 +17,10 @@ def skew() -> None:
     matrix = cv2.getPerspectiveTransform(pts_1, pts_2)
     imgOutput = cv2.warpPerspective(img, matrix, (width, height))
 
-    cv2.imshow("cards", imgOutput)
+    cv2.imshow("Cards before skew", img)
+    cv2.waitKey(0)
+
+    cv2.imshow("Card skewed", imgOutput)
     cv2.waitKey(0)
 
 
